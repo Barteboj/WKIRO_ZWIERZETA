@@ -1,22 +1,14 @@
 #demoRelease.r
 #demonstrates how to use C2 standard model features in a pattern classification framework
 
-#optional clear workspace
-#rm(list = ls())
+rm(list = ls()) #optional clear workspace
 
-DEBUG <- TRUE
-if (DEBUG) {
-  debugSource('readAllImages.r')
-  debugSource('extractRandC1Patches.r')
-  debugSource('init_gabor.r')
-  debugSource('extractC2forcell.r')
-}
-source('readAllImages.r')
-source('extractRandC1Patches.r')
-source('init_gabor.r')
-source('extractC2forcell.r')
+#TODO #put your own path to osusvm here
 
-useSVM <- FALSE
+useSVM <- FALSE #if you do not have osusvm installed you can turn this
+                #to 0, so that the classifier would be a NN classifier
+                #note: NN is not a great classifier for these features
+
 READPATCHESFROMFILE <- FALSE  #use patches that were already computed
                               #(e.g., from natural images)
 
@@ -30,6 +22,23 @@ train_pos <- 'images_to_use/in_use/train_pos'
 train_neg <- 'images_to_use/in_use/train_neg'
 test_pos  <- 'images_to_use/in_use/test_pos'
 test_neg  <- 'images_to_use/in_use/test_neg'
+
+DEBUG <- TRUE
+if (DEBUG) {
+  debugSource('readAllImages.r')
+  debugSource('extractRandC1Patches.r')
+  debugSource('init_gabor.r')
+  debugSource('extractC2forcell.r')
+}
+source('readAllImages.r')
+source('extractRandC1Patches.r')
+source('init_gabor.r')
+source('extractC2forcell.r')
+
+
+
+
+
 
 cI <- readAllImages(train_pos, train_neg, test_pos, test_neg) #cI is a cell containing
                                                               #all training and testing images
