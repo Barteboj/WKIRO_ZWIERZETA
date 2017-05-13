@@ -1,4 +1,6 @@
 install.packages("matlab","png","signal")
+source("https://bioconductor.org/biocLite.R")
+biocLite("EBImage")
 library(matlab)
 library(png)
 library(signal)

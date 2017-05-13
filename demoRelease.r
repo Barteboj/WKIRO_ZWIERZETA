@@ -41,22 +41,18 @@ if (length(cI$test_pos) == 0 | length(cI$test_neg) == 0) {
 
 #below the c1 prototypes are extracted from the images/ read from file
 if (!READPATCHESFROMFILE) {
-  tic <- Sys.time()
+  readPatchesStartTime <- Sys.time()
   numPatchesPerSize <- 10  #more will give better results, but will
                            #take more time to compute
   
   cPatches <- extractRandC1Patches(cI$train_pos, numPatchSizes, 
                                    numPatchesPerSize, patchSizes) #fix: extracting from positive only
   
-  totaltimespectextractingPatches <- Sys.time() - tic
-  t_str <- as.numeric(totaltimespectextractingPatches, units = "secs")
-  print(paste('extracting patches takes ', t_str, ' seconds'))
+  totaltimespentextractingPatches <- Sys.time() - readPatchesStartTime
+  cat('Time spent extracting patches (seconds): ', totaltimespentextractingPatches, '\n')
 } else {
-  stop('NOT IMPLEMENTED')
   #TODO
-  #print('reading patches');
-  #cPatches = load('PatchesFromNaturalImages250per4sizes','cPatches');
-  #cPatches = cPatches.cPatches;
+  stop('Reading patches from file not implemented yet!')
 }
 
 #----Settings for Testing --------#
@@ -72,42 +68,22 @@ Div       <- div
 
 print('Initializing gabor filters -- full set...')
 #creates the gabor filters use to extract the S1 layer
-init_gabor_ret_val  <- init_gabor(rot, RF_siz, Div)
-fSiz                <- init_gabor_ret_val[[1]]
-filters             <- init_gabor_ret_val[[2]]
-c1OL                <- init_gabor_ret_val[[3]]
-numSimpleFilters    <- init_gabor_ret_val[[4]]
+result_init_gabor  <- init_gabor(rot, RF_siz, Div)
+fSiz                <- result_init_gabor[[1]]
+filters             <- result_init_gabor[[2]]
+c1OL                <- result_init_gabor[[3]]
+numSimpleFilters    <- result_init_gabor[[4]]
 print('done')
 
 #The actual C2 features are computed below for each one of the training/testing directories
-totaltimespectextractingC2 <- 0
 C2res <- list()
-tic <- Sys.time()
+c2StartTime <- Sys.time()
 for (i in 1:4) {
-  C2res[[i]] = extractC2forcell(filters,
-                                fSiz,
-                                c1SpaceSS,
-                                c1ScaleSS,
-                                c1OL,
-                                cPatches,
-                                cI[[i]],
-                                numPatchSizes)
-  extractC2forcellTime <- Sys.time() - tic
-  t_str <- as.numeric(extractC2forcellTime, units = "secs")
-  totaltimespectextractingC2 <- t_str + totaltimespectextractingC2
-  print(paste('extracting C2 takes ', t_str, ' seconds'))
+  C2res[[i]] = extractC2forcell(filters,fSiz,c1SpaceSS,c1ScaleSS,c1OL,cPatches,cI[[i]],numPatchSizes)
+  
+  totaltimespentextractingC2 <- Sys.time() - c2StartTime
+  cat('Time spent extracting C2[',i, '] :', totaltimespentextractingC2, ' \n')
 }
 
-#%Simple classification code
-#XTrain = [C2res{1} C2res{2}]; %training examples as columns 
-#XTest =  [C2res{3},C2res{4}]; %the labels of the training set
-#ytrain = [ones(size(C2res{1},2),1);-ones(size(C2res{2},2),1)];%testing examples as columns
-#ytest = [ones(size(C2res{3},2),1);-ones(size(C2res{4},2),1)]; %the true labels of the test set
-#if useSVM
-#Model = CLSosusvm(XTrain,ytrain);  %training
-#[ry,rw] = CLSosusvmC(XTest,Model); %predicting new labels
-#else %use a Nearest Neighbor classifier
-#Model = CLSnn(XTrain, ytrain); %training
-#[ry,rw] = CLSnnC(XTest,Model); %predicting new labels
-#end  
-#successrate = mean(ytest==ry) %a simple classification score
+#TODO 
+#classification with SVM
