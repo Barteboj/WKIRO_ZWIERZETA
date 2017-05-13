@@ -3,6 +3,12 @@
 
 rm(list = ls()) #optional clear workspace
 
+#dependencies:
+source('readAllImages.r')
+source('extractRandC1Patches.r')
+source('init_gabor.r')
+source('extractC2forcell.r')
+
 #TODO #put your own path to osusvm here
 
 useSVM <- FALSE #if you do not have osusvm installed you can turn this
@@ -23,35 +29,24 @@ train_neg <- 'images_to_use/in_use/train_neg'
 test_pos  <- 'images_to_use/in_use/test_pos'
 test_neg  <- 'images_to_use/in_use/test_neg'
 
-DEBUG <- TRUE
-if (DEBUG) {
-  debugSource('readAllImages.r')
-  debugSource('extractRandC1Patches.r')
-  debugSource('init_gabor.r')
-  debugSource('extractC2forcell.r')
-}
-source('readAllImages.r')
-source('extractRandC1Patches.r')
-source('init_gabor.r')
-source('extractC2forcell.r')
-
-
-
-
-
-
 cI <- readAllImages(train_pos, train_neg, test_pos, test_neg) #cI is a cell containing
                                                               #all training and testing images
 if (length(cI$train_pos) == 0 | length(cI$train_neg) == 0) {
   stop('No training images were loaded -- did you remember to change the path names?')
 }
 
+if (length(cI$test_pos) == 0 | length(cI$test_neg) == 0) {
+  stop('No testing images were loaded -- did you remember to change the path names?')
+}
+
 #below the c1 prototypes are extracted from the images/ read from file
 if (!READPATCHESFROMFILE) {
   tic <- Sys.time()
   numPatchesPerSize <- 10  #more will give better results, but will
-                            #take more time to compute
-  cPatches <- extractRandC1Patches(cI$train_pos, numPatchSizes, numPatchesPerSize, patchSizes) #fix: extracting from positive only
+                           #take more time to compute
+  
+  cPatches <- extractRandC1Patches(cI$train_pos, numPatchSizes, 
+                                   numPatchesPerSize, patchSizes) #fix: extracting from positive only
   
   totaltimespectextractingPatches <- Sys.time() - tic
   t_str <- as.numeric(totaltimespectextractingPatches, units = "secs")
