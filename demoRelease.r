@@ -82,7 +82,7 @@ for (i in 1:4) {
   C2res[[i]] = extractC2forcell(filters,fSiz,c1SpaceSS,c1ScaleSS,c1OL,cPatches,cI[[i]],numPatchSizes)
   
   totaltimespentextractingC2 <- Sys.time() - c2StartTime
-  cat('Time spent extracting C2[',i, '] :', totaltimespentextractingC2, ' \n')
+  cat('Time spent extracting C2[',i, '] :', as.numeric(totaltimespentextractingC2,units="secs"), ' \n')
 }
 
 #TODO 
