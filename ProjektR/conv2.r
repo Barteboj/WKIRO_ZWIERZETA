@@ -1,32 +1,14 @@
-conv2 <- function(A, B) {
-  # Returns the two-dimensional convolution of matrices A and B.
+conv2 <- function(A, B){
   
-  a_size <- dim(A)
-  b_size <- dim(B)
-  ma <- a_size[1]
-  na <- a_size[2]
-  mb <- b_size[1]
-  nb <- b_size[2]
+  A.pad <- matrix(0, ncol = NCOL(A) + NCOL(B)-1, nrow = NROW(A)+NROW(B)-1);
+  A.pad[1:NROW(A), 1:NCOL(A)] <- A
+  B.pad <- matrix(0, ncol = NCOL(A) + NCOL(B)-1, nrow = NROW(A)+NROW(B)-1);
+  B.pad[1:NROW(B), 1:NCOL(B)] <- B
   
-  mc <- max(ma+mb-1, ma, mb)
-  nc <- max(na+nb-1, na, nb)
+  A.fft <- fft(A.pad);
+  B.fft <- fft(B.pad);
+  M <- fft(A.fft * B.fft, inverse = TRUE)/length(A.fft)
   
-  C <- matrix(data = 0, nrow = mc, ncol = nc)
-  for (j in 1:mc) {
-    for (k in 1:nc) {
-      for (p in 1:ma) {
-        for (q in 1:na) {
-          if (q > k) { break }
-          if (p > j) { break }
-          i_y <- k-q+1
-          if (i_y > nb) { break }
-          i_x <- j-p+1
-          if (i_x > mb) { break }
-          C[j,k] <- C[j,k] + A[p,q]*B[i_x, i_y]
-        }
-      }
-    }
-  }
-  
+  C <- Re(M)
   return(C)
 }
