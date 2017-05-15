@@ -5,7 +5,7 @@ C1 = function(stim, filters, fSiz, c1SpaceSS, c1ScaleSS, c1OL, INCLUDEBORDERS = 
   
   source('unpadimage.r')
   source('sumfilter.r')
-  source('conv2same.r')
+  source('convulation.r')
   source('maxfilter.r')
 
   USECONV2 = 1

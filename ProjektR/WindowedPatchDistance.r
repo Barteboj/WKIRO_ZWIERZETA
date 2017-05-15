@@ -3,10 +3,10 @@ WindowedPatchDistance <- function(Im, Patch) {
   DEBUG <- TRUE
   if (DEBUG) {
     debugSource('sumfilter.r')
-    debugSource('conv2same.r')
+    debugSource('convulation.r')
   } else {
     source('sumfilter.r')
-    source('conv2same.r')
+    source('convulation.r')
   }
   
   dIm <- length(Im)
