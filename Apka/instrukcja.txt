@@ -1,5 +1,6 @@
 Apka zbiera wszystkie zdjêcia z folderu images i wyœwietla je w odstêpach czasowych.
+W pliku expected.txt s¹ zapisane poprawne odpowiedzi do plików w kolejnoœci w jakiej s¹ w folderze, 1-tak, 0-nie. Powinno ich byæ tyle samo ile zdjêæ w folderze.
 Czas pokazywania ustawiamy na starcie apki wpisujac liczbê ms na wyœwietlenie zdjêcia -> pole po lewej stronie przycisków.
 Start w³¹cza przyciski i pokazuje pierwsze zdjêcie.
 Po ka¿dym naciœniêciu przycisku pojawia siê nowe zdjecie i trzeba zadecydowaæ np. czy jest zwierzê czy nie.
-Na koniec zapisywany jest plik test.txt gdzie s¹ odpowiednio zapisane nazwy plików i odpowiedŸ: 1-tak, 0-nie
+Na koniec zapisywany jest plik test.txt gdzie s¹ odpowiednio zapisane nazwy plików i odpowiedŸ: 1-tak, 0-nie, poni¿ej jest dok³adnoœæ odpowiedzi usera.
