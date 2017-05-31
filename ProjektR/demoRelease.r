@@ -11,7 +11,7 @@ source('extractC2forcell.r')
 
 #TODO #put your own path to osusvm here
 
-useSVM <- FALSE #if you do not have osusvm installed you can turn this
+useSVM <- TRUE #if you do not have osusvm installed you can turn this
                 #to 0, so that the classifier would be a NN classifier
                 #note: NN is not a great classifier for these features
 
@@ -87,3 +87,30 @@ for (i in 1:4) {
 
 #TODO 
 #classification with SVM
+
+#Simple classification code
+XTrain <- cbind(C2res[[1]], C2res[[2]]) #training examples as columns
+XTest  <-  cbind(C2res[[3]], C2res[[4]]) #the labels of the training set
+ytrain <- matrix(c(rep(1, dim(C2res[[1]])[2]), rep(-1, dim(C2res[[2]])[2])), ncol = 1)
+ytest  <- matrix(c(rep(1, dim(C2res[[3]])[2]), rep(-1, dim(C2res[[4]])[2])), ncol = 1)
+
+ry <- c()
+if (useSVM) {
+  require('e1071')
+  train <- t(XTrain)
+  test <- t(XTest)
+  cl <- factor(ytrain)
+  model <- svm(train, cl)
+  pred <- predict(model, test)
+  ry <- as.integer(as.vector(pred))
+} else { #use a Nearest Neighbor classifier
+  require('class')
+  train <- t(XTrain)
+  test <- t(XTest)
+  cl <- factor(ytrain)
+  knn_ret <- knn(train, test, cl)
+  ry <- as.integer(as.vector(knn_ret))
+}
+
+successrate <- mean(as.integer(ytest == ry)) #a simple classification score
+print(successrate)
