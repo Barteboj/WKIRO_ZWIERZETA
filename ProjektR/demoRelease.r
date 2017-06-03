@@ -8,6 +8,8 @@ source('readAllImages.r')
 source('extractRandC1Patches.r')
 source('init_gabor.r')
 source('extractC2forcell.r')
+source('SVMClassificate.r')
+source('NNClassificate.r')
 
 #TODO #put your own path to osusvm here
 
@@ -85,32 +87,18 @@ for (i in 1:4) {
   cat('Time spent extracting C2[',i, '] :', as.numeric(totaltimespentextractingC2,units="secs"), ' \n')
 }
 
-#TODO 
-#classification with SVM
+#Classification
+trainSetX = cbind(C2res[[1]], C2res[[2]])
+testSetX =  cbind(C2res[[3]], C2res[[4]])
+trainSetY = matrix(c(rep(1, dim(C2res[[1]])[2]), rep(-1, dim(C2res[[2]])[2])), ncol = 1)
+testSetY = matrix(c(rep(1, dim(C2res[[3]])[2]), rep(-1, dim(C2res[[4]])[2])), ncol = 1)
 
-#Simple classification code
-XTrain <- cbind(C2res[[1]], C2res[[2]]) #training examples as columns
-XTest  <-  cbind(C2res[[3]], C2res[[4]]) #the labels of the training set
-ytrain <- matrix(c(rep(1, dim(C2res[[1]])[2]), rep(-1, dim(C2res[[2]])[2])), ncol = 1)
-ytest  <- matrix(c(rep(1, dim(C2res[[3]])[2]), rep(-1, dim(C2res[[4]])[2])), ncol = 1)
-
-ry <- c()
+ry = c()
 if (useSVM) {
-  require('e1071')
-  train <- t(XTrain)
-  test <- t(XTest)
-  cl <- factor(ytrain)
-  model <- svm(train, cl)
-  pred <- predict(model, test)
-  ry <- as.integer(as.vector(pred))
-} else { #use a Nearest Neighbor classifier
-  require('class')
-  train <- t(XTrain)
-  test <- t(XTest)
-  cl <- factor(ytrain)
-  knn_ret <- knn(train, test, cl)
-  ry <- as.integer(as.vector(knn_ret))
+	ry = SVMClassificate(trainSetX, testSetX, trainSetY)
+} else {
+  ry = NNClassificate(trainSetX, testSetX, trainSetY)
 }
 
-successrate <- mean(as.integer(ytest == ry)) #a simple classification score
+successrate = mean(as.integer(testSetY == ry)) #a simple classification score
 print(successrate)
