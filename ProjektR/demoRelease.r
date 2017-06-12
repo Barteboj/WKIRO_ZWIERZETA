@@ -25,11 +25,13 @@ patchSizes <- c(4, 8, 12, 16) #other sizes might be better, maybe not
 
 numPatchSizes <- length(patchSizes)
 
+directories <- c('Close-body', 'Far-body', 'Head', 'Medium-body')
+chosen_directory <- directories[1]
 #specify directories for training and testing images
-train_pos <- 'images_to_use/in_use/train_pos'
-train_neg <- 'images_to_use/in_use/train_neg'
-test_pos  <- 'images_to_use/in_use/test_pos'
-test_neg  <- 'images_to_use/in_use/test_neg'
+train_pos <- paste('images_to_use/Train/Targets/', chosen_directory, sep ="")
+train_neg <- paste('images_to_use/Train/Distractors/', chosen_directory, sep ="")
+test_pos  <- paste('images_to_use/Test/Targets/', chosen_directory, sep ="")
+test_neg  <- paste('images_to_use/Test/Distractors/', chosen_directory, sep ="")
 
 cI <- readAllImages(train_pos, train_neg, test_pos, test_neg) #cI is a cell containing
                                                               #all training and testing images
