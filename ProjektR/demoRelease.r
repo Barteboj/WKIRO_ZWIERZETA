@@ -26,7 +26,7 @@ patchSizes <- c(4, 8, 12, 16) #other sizes might be better, maybe not
 numPatchSizes <- length(patchSizes)
 
 directories <- c('Close-body', 'Far-body', 'Head', 'Medium-body')
-chosen_directory <- directories[1]
+chosen_directory <- directories[1] #CHOOSE FOLDER!
 #specify directories for training and testing images
 train_pos <- paste('images_to_use/Train/Targets/', chosen_directory, sep ="")
 train_neg <- paste('images_to_use/Train/Distractors/', chosen_directory, sep ="")
